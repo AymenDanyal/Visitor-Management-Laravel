@@ -16,5 +16,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./  # The directory to deploy; change as needed
           server-dir: /visitorlog.simboz.website/ # Replace with your target directory on the server
-          protocol: ftps
+          protocol: ftp
           port: 21
