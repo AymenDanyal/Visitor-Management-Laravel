@@ -3,7 +3,7 @@ name: FTP Deploy
 on:
   push:
     branches:
-      - main  # Change to your branch name if it's not `main`
+      - main  # Change to your branch name if needed
 
 jobs:
   deploy:
@@ -16,8 +16,10 @@ jobs:
       - name: Deploy to FTP Server
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          ftp-server: ${{ secrets.FTP_SERVER }}
-          ftp-username: ${{ secrets.FTP_USERNAME }}
-          ftp-password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./visitorlog.simboz.website  # The directory to deploy; `./` means deploy everything in the repository
-          git-ftp-args: --insecure  # Optional: add any additional arguments
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./  # The directory to deploy; change as needed
+          server-dir: /visitorlog.simboz.website # Replace with your target directory on the server
+          protocol: ftps  # Change to ftp if your server does not support FTPS
+          port: 21  # FTP port (change to your port if different)
