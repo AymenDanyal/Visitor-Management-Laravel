@@ -1,25 +1,20 @@
-name: FTP Deploy
-
-on:
-  push:
-    branches:
-      - main  # Change to your branch name if needed
-
+on: push
+name: 🚀 Deploy website on push
 jobs:
-  deploy:
+  web-deploy:
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
 
-      - name: Deploy to FTP Server
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./  # The directory to deploy; change as needed
           server-dir: /visitorlog.simboz.website/ # Replace with your target directory on the server
-          protocol: ftps  # Change to ftp if your server does not support FTPS
-          port: 21  # FTP port (change to your port if different)
+          protocol: ftp
+          port: 21
