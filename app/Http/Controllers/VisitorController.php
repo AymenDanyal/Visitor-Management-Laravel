@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Visitor;
 use App\Models\CheckIn;
 use Illuminate\Support\Facades\Validator;
+use App\Events\CheckInUpdated;
+
 
 class VisitorController extends Controller
 {
@@ -20,51 +22,76 @@ class VisitorController extends Controller
 
     /**
      * Store a newly created visitor in storage.
-     */public function store(Request $request)
-{
-    // Validate request
-    $validator = Validator::make($request->all(), [
-        'group' => 'required|boolean',
-        'name' => 'required_if:group,false|string|max:255',
-        'phone' => 'required_if:group,false|string|max:20',
-        'cnic_front_image' => 'required_if:group,false|string|max:255',
-        'cnic_back_image' => 'required_if:group,false|string|max:255',
-        'user_image' => 'required_if:group,false|string|max:255',
-        'name.*' => 'required_if:group,true|string|max:255',
-        'phone.*' => 'required_if:group,true|string|max:20',
-        'cnic_front_image.*' => 'required_if:group,true|string|max:255',
-        'cnic_back_image.*' => 'required_if:group,true|string|max:255',
-        'user_image.*' => 'required_if:group,true|string|max:255',
+     */
+    public function store(Request $request)
+    {
+        // Validate request
+        $validator = Validator::make($request->all(), [
+            'group' => 'required|boolean',
+            'name' => 'required_if:group,false|string|max:255',
+            'phone' => 'required_if:group,false|string|max:20',
+            'cnic_front_image' => 'required_if:group,false|string|max:255',
+            'cnic_back_image' => 'required_if:group,false|string|max:255',
+            'user_image' => 'required_if:group,false|string|max:255',
+            'name.*' => 'required_if:group,true|string|max:255',
+            'phone.*' => 'required_if:group,true|string|max:20',
+            'cnic_front_image.*' => 'required_if:group,true|string|max:255',
+            'cnic_back_image.*' => 'required_if:group,true|string|max:255',
+            'user_image.*' => 'required_if:group,true|string|max:255',
 
-        'purpose_of_visit' => 'required|in:interview,meeting,delivery,other',
-        'department' => 'required|string|max:255',
-        'department_person_name' => 'required|string|max:255',
-        'organization_name' => 'nullable|string|max:255',
-        'vehicle_number' => 'nullable|string|max:50',
-        'comments' => 'nullable|string',
-    ]);
+            'gatekeeper_id' => 'required|string|max:255',
+            'purpose_of_visit' => 'required|in:interview,meeting,delivery,other',
+            'department' => 'required|string|max:255',
+            'department_person_name' => 'required|string|max:255',
+            'organization_name' => 'nullable|string|max:255',
+            'vehicle_number' => 'nullable|string|max:50',
+            'comments' => 'nullable|string',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
-    }
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-    $visitors = [];
-    
-    if ($request->group) {
-        // Handle multiple visitors
-        $names = $request->input('name');
-        $phones = $request->input('phone');
-        $cnicFrontImages = $request->input('cnic_front_image');
-        $cnicBackImages = $request->input('cnic_back_image');
-        $userImages = $request->input('user_image');
+        $visitors = [];
 
-        foreach ($names as $index => $name) {
-            $visitors[] = Visitor::create([
-                'name' => $name,
-                'phone' => $phones[$index],
-                'cnic_front_image' => $cnicFrontImages[$index],
-                'cnic_back_image' => $cnicBackImages[$index],
-                'user_image' => $userImages[$index],
+        if ($request->group) {
+            // Handle multiple visitors
+            $names = $request->input('name');
+            $phones = $request->input('phone');
+            $cnicFrontImages = $request->input('cnic_front_image');
+            $cnicBackImages = $request->input('cnic_back_image');
+            $userImages = $request->input('user_image');
+
+            foreach ($names as $index => $name) {
+                $visitor = Visitor::create([
+                    'name' => $name,
+                    'phone' => $phones[$index],
+                    'cnic_front_image' => $cnicFrontImages[$index],
+                    'cnic_back_image' => $cnicBackImages[$index],
+                    'user_image' => $userImages[$index],
+                    'purpose_of_visit' => $request->input('purpose_of_visit'),
+                    'department' => $request->input('department'),
+                    'department_person_name' => $request->input('department_person_name'),
+                    'organization_name' => $request->input('organization_name'),
+                    'vehicle_number' => $request->input('vehicle_number'),
+                    'comments' => $request->input('comments'),
+                ]);
+
+                $visitors[] = $visitor;
+
+                CheckIn::create([
+                    'visitor_id' => $visitor->id, // Use the visitor's ID from the created visitor
+                    'gatekeeper_id' => $request->input('gatekeeper_id'),
+                ]);
+            }
+        } else {
+            // Handle single visitor
+            $visitor = Visitor::create([
+                'name' => $request->input('name'),
+                'phone' => $request->input('phone'),
+                'cnic_front_image' => $request->input('cnic_front_image'),
+                'cnic_back_image' => $request->input('cnic_back_image'),
+                'user_image' => $request->input('user_image'),
                 'purpose_of_visit' => $request->input('purpose_of_visit'),
                 'department' => $request->input('department'),
                 'department_person_name' => $request->input('department_person_name'),
@@ -72,18 +99,21 @@ class VisitorController extends Controller
                 'vehicle_number' => $request->input('vehicle_number'),
                 'comments' => $request->input('comments'),
             ]);
+
+            $visitors[] = $visitor;
+
+            CheckIn::create([
+                'visitor_id' => $visitor->id, // Use the visitor's ID from the created visitor
+                'gatekeeper_id' => $request->input('gatekeeper_id'),
+            ]);
         }
-    } else {
-        // Handle single visitor
-        $visitor = Visitor::create($request->all());
-        $visitors[] = $visitor;
+
+        return response()->json([
+            'message' => 'Visitor(s) created successfully',
+            'visitors' => $visitors,
+        ], 201);
     }
 
-    return response()->json([
-        'message' => 'Visitor(s) created successfully',
-        'visitors' => $visitors
-    ], 201);
-}
 
 
     /**
@@ -92,7 +122,7 @@ class VisitorController extends Controller
     public function show($id)
     {
         $visitor = Visitor::find($id);
-
+        
         if (!$visitor) {
             return response()->json(['error' => 'Visitor not found'], 404);
         }
@@ -106,7 +136,7 @@ class VisitorController extends Controller
     public function update(Request $request, $id)
     {
         $visitor = Visitor::find($id);
-
+        event(new CheckInUpdated($visitor));
         if (!$visitor) {
             return response()->json(['error' => 'Visitor not found'], 404);
         }
@@ -143,6 +173,7 @@ class VisitorController extends Controller
     public function destroy($id)
     {
         $visitor = Visitor::find($id);
+        event(new CheckInUpdated($visitor));
 
         if (!$visitor) {
             return response()->json(['error' => 'Visitor not found'], 404);
@@ -174,7 +205,8 @@ class VisitorController extends Controller
             'gatekeeper_id' => $request->gatekeeper_id,
             'check_in_time' => now(),
         ]);
-
+        dd($checkIn);
+        event(new CheckInUpdated($checkIn));
         return response()->json([
             'message' => 'Visitor checked in successfully',
             'check_in' => $checkIn
@@ -199,7 +231,8 @@ class VisitorController extends Controller
         $checkIn->update([
             'check_out_time' => now(),
         ]);
-
+        
+        event(new CheckInUpdated($checkIn));
         return response()->json([
             'message' => 'Visitor checked out successfully',
             'check_in' => $checkIn

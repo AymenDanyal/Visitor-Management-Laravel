@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\CheckIn;
 use App\Models\Visitor;
 use App\Models\User;
+use App\Events\CheckInUpdated;
 use Illuminate\Support\Facades\Validator;
 
 class CheckInController extends Controller
@@ -37,6 +38,7 @@ class CheckInController extends Controller
             'visitor_id' => $request->visitor_id,
             'gatekeeper_id' => $request->gatekeeper_id,
         ]);
+        event(new CheckInUpdated($checkIn));
 
         return response()->json([
             'message' => 'Visitor checked in successfully',
@@ -49,14 +51,18 @@ class CheckInController extends Controller
      */
     public function show($id)
     {
+       
+       
         $checkIn = CheckIn::with(['visitor', 'gatekeeper'])->find($id);
-
         if (!$checkIn) {
             return response()->json(['error' => 'Check-in record not found'], 404);
         }
+       
+      
 
         return response()->json($checkIn);
     }
+    
 
     /**
      * Update the check-out time for a specific check-in record.
@@ -96,4 +102,5 @@ class CheckInController extends Controller
             'message' => 'Check-in record deleted successfully'
         ]);
     }
+
 }

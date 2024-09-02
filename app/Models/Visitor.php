@@ -39,7 +39,7 @@ class Visitor extends Model
 
     public function checkIns()
     {
-        return $this->hasMany(CheckIn::class);
+        return $this->hasMany(CheckIn::class, 'id');
     }
 }
 

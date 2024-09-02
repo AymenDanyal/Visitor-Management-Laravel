@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
+    protected $fillable = ['name'];
+
+    public function visitors()
+    {
+        return $this->belongsToMany(Visitor::class, 'visitor_departments');
+    }
 }
