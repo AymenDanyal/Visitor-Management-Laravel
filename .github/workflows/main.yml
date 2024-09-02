@@ -23,3 +23,4 @@ jobs:
           server-dir: /visitorlog.simboz.website/ # Replace with your target directory on the server
           protocol: ftps  # Change to ftp if your server does not support FTPS
           port: 21  # FTP port (change to your port if different)
+          insecure: true  # Set to true if you encounter SSL/TLS issues
