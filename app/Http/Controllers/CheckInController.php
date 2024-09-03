@@ -38,7 +38,8 @@ class CheckInController extends Controller
             'visitor_id' => $request->visitor_id,
             'gatekeeper_id' => $request->gatekeeper_id,
         ]);
-        event(new CheckInUpdated($checkIn));
+        
+        event(new CheckInUpdated($checkIn, 'Check-in'));
 
         return response()->json([
             'message' => 'Visitor checked in successfully',
@@ -67,9 +68,9 @@ class CheckInController extends Controller
     /**
      * Update the check-out time for a specific check-in record.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $checkIn = CheckIn::find($id);
+        $checkIn = CheckIn::find($request->id);
 
         if (!$checkIn) {
             return response()->json(['error' => 'Check-in record not found'], 404);
@@ -78,7 +79,7 @@ class CheckInController extends Controller
         $checkIn->update([
             'check_out_time' => now(),
         ]);
-
+        event(new CheckInUpdated($checkIn, 'Check-out'));
         return response()->json([
             'message' => 'Visitor checked out successfully',
             'checkIn' => $checkIn
@@ -89,15 +90,16 @@ class CheckInController extends Controller
      * Remove the specified check-in record from storage.
      */
     public function destroy($id)
-    {
+    {  dd('fdsafa');
         $checkIn = CheckIn::find($id);
-
+      
         if (!$checkIn) {
             return response()->json(['error' => 'Check-in record not found'], 404);
         }
 
         $checkIn->delete();
 
+        event(new CheckInUpdated($checkIn, 'Delete'));
         return response()->json([
             'message' => 'Check-in record deleted successfully'
         ]);

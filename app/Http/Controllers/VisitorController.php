@@ -136,7 +136,7 @@ class VisitorController extends Controller
     public function update(Request $request, $id)
     {
         $visitor = Visitor::find($id);
-        event(new CheckInUpdated($visitor));
+        
         if (!$visitor) {
             return response()->json(['error' => 'Visitor not found'], 404);
         }
@@ -205,7 +205,6 @@ class VisitorController extends Controller
             'gatekeeper_id' => $request->gatekeeper_id,
             'check_in_time' => now(),
         ]);
-        dd($checkIn);
         event(new CheckInUpdated($checkIn));
         return response()->json([
             'message' => 'Visitor checked in successfully',

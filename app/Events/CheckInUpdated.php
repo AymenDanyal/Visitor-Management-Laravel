@@ -16,11 +16,13 @@ class CheckInUpdated implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
+  public $data;
   public $message;
 
-  public function __construct($message)
+  public function __construct($data, $message = null)
   {
-      $this->message = $message;
+    $this->data = $data;
+    $this->message = $message;
   }
 
   public function broadcastOn()

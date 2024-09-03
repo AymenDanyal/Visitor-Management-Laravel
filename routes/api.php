@@ -13,8 +13,8 @@ use App\Events\CheckInUpdated;
 
 
 
-Route::middleware('auth:sanctum')->group(function () {
-
+Route::middleware('auth:sanctum','checkToken')->group(function () {
+    
     Route::get('visitors', [VisitorController::class, 'index']);
     Route::post('visitors', [VisitorController::class, 'store']);
     Route::get('visitors/{id}', [VisitorController::class, 'show']);
@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('visitors/check-in', [VisitorController::class, 'checkIn']);
     Route::post('visitors/check-out/{id}', [VisitorController::class, 'checkOut']);
     
+
     Route::get('vehicles', [VehicleController::class, 'index']);
     Route::post('vehicles', [VehicleController::class, 'store']);
     Route::get('vehicles/{id}', [VehicleController::class, 'show']);
@@ -44,8 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('check-ins', [CheckInController::class, 'index']);
     Route::post('add-check-ins', [CheckInController::class, 'store']);
     Route::get('check-ins/{id}', [CheckInController::class, 'show']);
-    Route::put('check-ins/{id}', [CheckInController::class, 'update']);
-    Route::delete('check-ins/{id}', [CheckInController::class, 'destroy']);
+    Route::put('check-out/{id}', [CheckInController::class, 'update']);
+    Route::delete('checkDel/{id}', [CheckInController::class, 'destroy']);
 
     Route::get('roles', [RoleController::class, 'index']);
     Route::post('roles', [RoleController::class, 'store']);
