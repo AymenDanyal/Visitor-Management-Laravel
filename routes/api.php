@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum','checkToken')->group(function () {
     
 
     Route::get('vehicles', [VehicleController::class, 'index']);
-    Route::post('vehicles', [VehicleController::class, 'store']);
+    Route::post('vehicles', [VehicleController::class, 'storeCheckin']);
     Route::get('vehicles/{id}', [VehicleController::class, 'show']);
     Route::put('vehicles/{id}', [VehicleController::class, 'update']);
     Route::delete('vehicles/{id}', [VehicleController::class, 'destroy']);
@@ -66,7 +66,7 @@ Route::middleware('auth:sanctum','checkToken')->group(function () {
 });
 
 
-Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 
