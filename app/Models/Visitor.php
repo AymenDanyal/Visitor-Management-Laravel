@@ -41,5 +41,9 @@ class Visitor extends Model
     {
         return $this->hasMany(CheckIn::class, 'id');
     }
+    public function purpose()
+    {
+        return $this->hasMany(Purpose::class, 'id');
+    }
 }
 

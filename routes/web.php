@@ -4,18 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VisitorController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionsController;
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+
 Route::group(['middleware' => 'auth'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('index', [AdminController::class, 'index'])->name('admin.index');  
@@ -34,6 +28,33 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('{id}/edit', [VisitorController::class, 'edit'])->name('visitors.edit');   
         Route::put('{id}', [VisitorController::class, 'update'])->name('visitors.update');    
         Route::delete('{id}', [VisitorController::class, 'destroy'])->name('visitors.destroy'); 
+    });
+    Route::prefix('users')->group(function () {
+        Route::get('index', [UserController::class, 'index'])->name('users.index');  
+        Route::get('create', [UserController::class, 'create'])->name('users.create'); 
+        Route::post('store', [UserController::class, 'store'])->name('users.store');   
+        Route::get('{id}', [UserController::class, 'show'])->name('users.show');      
+        Route::get('{id}/edit', [UserController::class, 'edit'])->name('users.edit');   
+        Route::put('{id}', [UserController::class, 'update'])->name('users.update');    
+        Route::delete('{id}', [UserController::class, 'destroy'])->name('users.destroy'); 
+    });
+    Route::prefix('roles')->group(function () {
+        Route::get('index', [RoleController::class, 'index'])->name('roles.index');  
+        Route::get('create', [RoleController::class, 'create'])->name('roles.create'); 
+        Route::post('store', [RoleController::class, 'store'])->name('roles.store');   
+        Route::get('{id}', [RoleController::class, 'show'])->name('roles.show');      
+        Route::get('{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');   
+        Route::put('{id}', [RoleController::class, 'update'])->name('roles.update');    
+        Route::delete('{id}', [RoleController::class, 'destroy'])->name('roles.destroy'); 
+    });
+    Route::prefix('permissions')->group(function () {
+        Route::get('index', [PermissionsController::class, 'index'])->name('permissions.index');  
+        Route::get('create', [PermissionsController::class, 'create'])->name('permissions.create'); 
+        Route::post('store', [PermissionsController::class, 'store'])->name('permissions.store');   
+        Route::get('{id}', [PermissionsController::class, 'show'])->name('permissions.show');      
+        Route::get('{id}/edit', [PermissionsController::class, 'edit'])->name('permissions.edit');   
+        Route::put('{id}', [PermissionsController::class, 'update'])->name('permissions.update');    
+        Route::delete('{id}', [PermissionsController::class, 'destroy'])->name('permissions.destroy'); 
     });
 
     // Define the dashboard route with the name

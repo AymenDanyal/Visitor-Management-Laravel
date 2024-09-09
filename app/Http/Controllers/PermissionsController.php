@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 
-class RoleController extends Controller
+class PermissionsController extends Controller
 {
     /**
      * Display a listing of the roles.

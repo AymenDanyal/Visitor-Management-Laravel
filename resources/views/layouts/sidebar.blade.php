@@ -9,10 +9,10 @@
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" aria-expanded="true" data-toggle="collapse" aria-controls="collapseTwo"
-            data-target="#blogs">
+            data-target="#visitor">
             <i class="fas fa-file-alt"></i> <span>Visitors</span>
         </a>
-        <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="blogs">
+        <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="visitor">
              <div class="bg-white collapse-inner py-2 rounded">
                 <h6 class="collapse-header">Blogs</h6>
                 <a class="collapse-item"  href="{{ route('visitors.index') }}">Visitors</a>
@@ -36,16 +36,15 @@
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" aria-expanded="true" data-toggle="collapse" aria-controls="collapseTwo"
-            data-target="#blogs">
+            data-target="#user">
             <i class="fas fa-file-alt"></i> <span>Users</span>
         </a>
-        <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="blogs">
-            {{-- <div class="bg-white collapse-inner py-2 rounded">
+        <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="user">
+           <div class="bg-white collapse-inner py-2 rounded">
                 <h6 class="collapse-header">Blogs</h6>
-                <a class="collapse-item"  href="{{ route('blogs.index') }}">Blogs</a>
-                <a class="collapse-item" href="{{ route('blogs.create') }}">Add Blog</a>
-                <a class="collapse-item" href="{{ route('blogCat.index') }}">Blogs Categroies</a>
-            </div> --}}
+                <a class="collapse-item"  href="{{ route('users.index') }}">Users</a>
+                <a class="collapse-item" href="{{ route('users.create') }}">Add User</a>
+            </div> 
         </div>
     </li>
     

@@ -6,7 +6,7 @@
         <div class="col-lg-12">
             <div class="p-5">
                 <div class="text-left">
-                    <h1 class="h4 mb-4 text-gray-900">Add Visitor</h1>
+                    <h1 class="heading">Add Visitor</h1>
                 </div>
                 <form action="{{ route('visitors.store') }}" class="user" enctype="multipart/form-data" method="post">
                     @csrf
@@ -41,14 +41,15 @@
                             <label>User Image</label> 
                             <input class="form-control" name="user_image" required type="file">
                         </div>
-                        <div class="mb-3 col-sm-6">
-                            <label>Purpose of Visit</label>
-                            <select class="form-control" name="purpose_of_visit" required>
-                                <option value="" disabled selected>Select Purpose</option>
-                                <option value="interview">Interview</option>
-                                <option value="meeting">Meeting</option>
-                                <option value="delivery">Delivery</option>
-                                <option value="other">Other</option>
+                        <div class="mb-3 col-sm-12">
+                            <label for="purpose">Purpose of Visit</label>
+                            <select id="purpose" class="form-control" name="purpose_of_visit" required>
+                                <option value="">Select Purpose</option>
+                                @foreach ($purposes as $purpose)
+                                    <option value="{{ $purpose->id}}"user>
+                                        {{ $purpose->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3 col-sm-6">

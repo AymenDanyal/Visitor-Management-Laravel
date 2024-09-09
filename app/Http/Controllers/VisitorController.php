@@ -7,7 +7,7 @@ use App\Models\Visitor;
 use App\Models\CheckIn;
 use Illuminate\Support\Facades\Validator;
 use App\Events\CheckInUpdated;
-
+use App\Models\Purpose;
 
 class VisitorController extends Controller
 {
@@ -26,14 +26,16 @@ class VisitorController extends Controller
     }
     public function create()
     {
-        $visitors = Visitor::all();
-        return view('pages.visitors.create', compact('visitors'));
+        $purposes = Purpose::get();
+        return view('pages.visitors.create', compact('purposes'));
     }
     public function edit($id)
     {
         // Find the visitor by ID.
         $visitor = Visitor::find($id);
 
+        $purposes = Purpose::get();
+        
         // Check if the visitor exists.
         if (!$visitor) {
             // Redirect to a 404 page or show an error if the visitor does not exist.
@@ -41,13 +43,14 @@ class VisitorController extends Controller
         }
 
         // Return the view with the visitor data.
-        return view('pages.visitors.edit', compact('visitor'));
+        return view('pages.visitors.edit', compact('visitor','purposes'));
     }
     /**
      * Store a newly created visitor in storage.
      */
     public function store(Request $request)
     {
+    
         // Validate request
         $validator = Validator::make($request->all(), [
             'name' => 'required_if:group,false|max:255',
@@ -55,7 +58,7 @@ class VisitorController extends Controller
             'cnic_front_image' => 'required_if:group,false|image|max:5000',
             'cnic_back_image' => 'required_if:group,false|image|max:5000',
             'user_image' => 'required_if:group,false|image|max:5000',
-            'purpose_of_visit' => 'required|in:interview,meeting,delivery,other',
+            'purpose_of_visit' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'department_person_name' => 'required|string|max:255',
             'organization_name' => 'nullable|string|max:255',
@@ -97,14 +100,15 @@ class VisitorController extends Controller
 
     public function storeCheckin(Request $request)
     {
+        
         // Validate request
         $validator = Validator::make($request->all(), [
             'group' => 'required|boolean',
-            'name' => 'required_if:group,false|max:255',
-            'phone' => 'required_if:group,false|max:255',
-            'cnic_front_image' => 'required_if:group,false|image|max:5000',
-            'cnic_back_image' => 'required_if:group,false|image|max:5000',
-            'user_image' => 'required_if:group,false|image|max:5000',
+            'name' => 'required_if:group,0|max:255',
+            'phone' => 'required_if:group,0|max:255',
+            'cnic_front_image' => 'required_if:group,0|max:5000',
+            'cnic_back_image' => 'required_if:group,0|max:5000',
+            'user_image' => 'required_if:group,0|max:5000',
 
             'name.*' => 'required_if:group,true|max:255',
             'phone.*' => 'required_if:group,true|max:255',
@@ -199,6 +203,7 @@ class VisitorController extends Controller
         // Broadcast the aggregated CheckIn data
         event(new CheckInUpdated($visitors, 'Check-in'));
 
+
         return response()->json([
             'message' => 'Visitor(s) created successfully',
             'data' => $visitors,
@@ -237,7 +242,7 @@ class VisitorController extends Controller
             'cnic_front_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000', // Adjust validation rules for images
             'cnic_back_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'user_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
-            'purpose_of_visit' => 'in:interview,meeting,delivery,other',
+            'purpose_of_visit' => 'string|max:255',
             'department' => 'string|max:255',
             'department_person_name' => 'string|max:255',
             'organization_name' => 'nullable|string|max:255',
@@ -246,7 +251,7 @@ class VisitorController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         // Handle file uploads if they are present

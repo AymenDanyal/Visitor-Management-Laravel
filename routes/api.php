@@ -16,7 +16,7 @@ use App\Events\CheckInUpdated;
 Route::middleware('auth:sanctum','checkToken')->group(function () {
     
     Route::get('visitors', [VisitorController::class, 'index']);
-    Route::post('visitors', [VisitorController::class, 'store']);
+    Route::post('visitors', [VisitorController::class, 'storeCheckin']);
     Route::get('visitors/{id}', [VisitorController::class, 'show']);
     Route::put('visitors/{id}', [VisitorController::class, 'update']);
     Route::delete('visitors/{id}', [VisitorController::class, 'destroy']);
@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum','checkToken')->group(function () {
     
 
     Route::get('vehicles', [VehicleController::class, 'index']);
-    Route::post('vehicles', [VehicleController::class, 'storeCheckin']);
+    Route::post('vehicles', [VehicleController::class, 'store']);
     Route::get('vehicles/{id}', [VehicleController::class, 'show']);
     Route::put('vehicles/{id}', [VehicleController::class, 'update']);
     Route::delete('vehicles/{id}', [VehicleController::class, 'destroy']);

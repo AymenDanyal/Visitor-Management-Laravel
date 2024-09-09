@@ -105,7 +105,7 @@
 
         $('.delete-btn').on('click', function() {
             const visitorId = $(this).data('id');
-            const row = $(this).closest('tr');
+            const row = $(this).closest('trusers');
 
             // SweetAlert2 for confirmation
             Swal.fire({
