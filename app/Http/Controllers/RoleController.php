@@ -63,7 +63,7 @@ class RoleController extends Controller
         // Attach permissions to the role
         $role->permissions()->sync($permissionIds);
 
-        return redirect()->route('roles.index')
+        return redirect()->route('users.index')
             ->with('success', 'Role created successfully.');
     }
 
@@ -78,10 +78,21 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::find($id);
+
+        if (!$role) {
+            return redirect()->route('roles.index')
+                ->with('error', 'Role not found');
+        }
+
+        // Retrieve permissions associated with the role
+        $rolePermissions = $role->permissions->pluck('id')->toArray();
+        
+        // Retrieve all available permissions
         $permissions = Permission::all();
 
-        return view('pages.roles.edit', compact('role', 'permissions'));
+        return view('pages.roles.edit', compact('role', 'permissions', 'rolePermissions'));
     }
+
     /**
      * Display the specified role.
      */
@@ -117,10 +128,8 @@ class RoleController extends Controller
 
         $role->update($request->all());
 
-        return response()->json([
-            'message' => 'Role updated successfully',
-            'role' => $role
-        ]);
+        return redirect()->route('users.index')
+        ->with('success', 'Role(s) updated successfully.');
     }
 
     /**
@@ -136,8 +145,7 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return response()->json([
-            'message' => 'Role deleted successfully'
-        ]);
+        return redirect()->route('users.index')
+        ->with('success', 'Role(s) deleted successfully.');
     }
 }

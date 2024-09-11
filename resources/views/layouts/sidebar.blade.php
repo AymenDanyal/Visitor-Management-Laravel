@@ -1,11 +1,9 @@
 <ul class="navbar-nav accordion bgside sidebar sidebar-dark" id="accordionSidebar">
     <a class="d-flex align-items-center justify-content-center sidebar-brand" href="/">
         <div class="sidebar-brand-icon">
-            <img class="logo img-fluid d-block auto p-2 p-md-4" src="{{asset('/logo/avon.png')}}" alt="Visitor Log Logo">
+            <img class="logo img-fluid d-block auto p-5" src="{{asset('/logoW.webp')}}" alt="Visitor Log Logo">
         </div>
     </a>
-    <hr class="sidebar-divider my-0">
-
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" aria-expanded="true" data-toggle="collapse" aria-controls="collapseTwo"
@@ -14,7 +12,7 @@
         </a>
         <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="visitor">
              <div class="bg-white collapse-inner py-2 rounded">
-                <h6 class="collapse-header">Blogs</h6>
+                <h6 class="collapse-header">Visitors</h6>
                 <a class="collapse-item"  href="{{ route('visitors.index') }}">Visitors</a>
                 <a class="collapse-item" href="{{ route('visitors.create') }}">Add Visitors</a>
             </div> 
@@ -22,16 +20,15 @@
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" aria-expanded="true" data-toggle="collapse" aria-controls="collapseTwo"
-            data-target="#products">
+            data-target="#departments">
             <i class="fas fa-boxes"></i> <span>Departments</span>
         </a>
-        <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="products">
-            {{-- <div class="bg-white collapse-inner py-2 rounded">
-                <h6 class="collapse-header">Products</h6>
-                <a class="collapse-item" href="{{ route('products.index') }}">Products</a>
-                <a class="collapse-item" href="{{ route('products.create') }}">Add Products</a>
-                <a class="collapse-item"  href="{{ route('product-cats.index') }}">Products Categroies</a>
-            </div> --}}
+        <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="departments">
+            <div class="bg-white collapse-inner py-2 rounded">
+                <h6 class="collapse-header">Departments</h6>
+                <a class="collapse-item" href="{{ route('departments.index') }}">Departments</a>
+                <a class="collapse-item" href="{{ route('purposes.index') }}">Purposes</a>
+            </div>
         </div>
     </li>
     <li class="nav-item">
@@ -41,7 +38,7 @@
         </a>
         <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="user">
            <div class="bg-white collapse-inner py-2 rounded">
-                <h6 class="collapse-header">Blogs</h6>
+                <h6 class="collapse-header">Users</h6>
                 <a class="collapse-item"  href="{{ route('users.index') }}">Users</a>
                 <a class="collapse-item" href="{{ route('users.create') }}">Add User</a>
             </div> 

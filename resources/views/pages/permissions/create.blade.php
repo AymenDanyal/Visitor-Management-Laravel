@@ -6,9 +6,9 @@
         <div class="col-lg-12">
             <div class="p-5">
                 <div class="text-left mb-4">
-                    <h1 class="heading">Create New Role</h1>
+                    <h1 class="heading">Create New Permission</h1>
                 </div>
-                <form action="{{ route('roles.store') }}" method="POST">
+                <form action="{{ route('permissions.store') }}" method="POST">
                     @csrf
 
                     @if ($errors->any())
@@ -22,25 +22,11 @@
                     @endif
 
                     <div class="form-group mb-4">
-                        <label for="role-name" class="form-label">Role Name</label>
-                        <input id="role-name" name="name" class="form-control" placeholder="Role Name" required value="{{ old('name') }}">
+                        <label for="permission-name" class="form-label">Permission Name</label>
+                        <input id="permission-name" name="name" class="form-control" placeholder="permission Name" required value="{{ old('name') }}">
                     </div>
 
-                    <div class="form-group mb-4">
-                        <label class="form-label">Existing Permissions</label>
-                        <div id="existing-permissions">
-                            @foreach($permissions as $permission)
-                                <div class="d-flex align-items-center mb-3" id="existing-permission-{{ $permission->id }}">
-                                    <input type="checkbox" name="existing_permissions[]" value="{{ $permission->id }}" id="permission-{{ $permission->id }}" 
-                                        @if(in_array($permission->id, old('existing_permissions', []))) checked @endif>
-                                    <label class="form-check-label ms-2" for="permission-{{ $permission->id }}">
-                                        {{ $permission->name }}
-                                    </label>
-                                    <button type="button" class="btn btn-danger btn-sm ms-3" onclick="removePermission({{ $permission->id }}, 'existing')">Remove</button>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
+           
 
                     <div class="form-group mb-4">
                         <label class="form-label">New Permissions</label>
@@ -51,7 +37,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button class="btn btn-primary btn-block" type="submit">Create Role</button>
+                        <button class="btn btn-primary btn-block" type="submit">Create Permission</button>
                     </div>
                 </form>
             </div>
@@ -70,7 +56,7 @@
             permissionIndex++;
             const newPermissionHtml = `
                 <div class="d-flex align-items-center mb-3" id="new-permission-${permissionIndex}">
-                    <input type="text" name="new_permissions[]" class="form-control" placeholder="New Permission Name" required>
+                    <input type="text" name="name[]" class="form-control" placeholder="New Permission Name" required>
                     <button type="button" class="btn btn-danger btn-sm ms-3" onclick="removePermission(${permissionIndex}, 'new')">Remove</button>
                 </div>
             `;
@@ -80,7 +66,7 @@
         // Remove permission field
         window.removePermission = function(index, type) {
             if (type === 'existing') {
-                $(`#existing-permission-${index}`).remove();Permission
+                $(`#existing-permission-${index}`).remove();
             } else {
                 $(`#new-permission-${index}`).remove();
             }

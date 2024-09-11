@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 
-class roleSeeeder extends Seeder
+class roleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class roleSeeeder extends Seeder
      */
     public function run()
     {
-        $user=User::find(3);
+        $user=User::find(1);
         $user->assignRole('admin');
     }
 }

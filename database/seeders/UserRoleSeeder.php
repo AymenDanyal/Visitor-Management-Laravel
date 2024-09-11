@@ -21,6 +21,7 @@ class UserRoleSeeder extends Seeder
 
         // Create a new user
         $user = User::create([
+            'id' => '1',
             'name' => 'Abdul Basit',
             'email' => 'basit56700@gmail.com',
             'password' => bcrypt('44332211'), // Ensure you use a secure password in production

@@ -11,12 +11,36 @@ class PurposeController extends Controller
     /**
      * Display a listing of the purposes.
      */
-    public function index()
+    public function index(Request $request)
     {
         $purposes = Purpose::all();
-        return response()->json($purposes);
+        if ($request->is('api/*')) {
+            return response()->json($purposes);
+        } else {
+
+            return view('pages.purposes.index', compact('purposes'));
+        }
+    }
+    public function create()
+    {
+        return view('pages.purposes.create');
     }
 
+    public function edit($id)
+    {
+        // Find the visitor by ID.
+        $purposes = Purpose::find($id);
+
+        // Check if the visitor exists.
+        if (!$purposes) {
+            // Redirect to a 404 page or show an error if the visitor does not exist.
+            return redirect()->route('purposes.index')->with('error', 'Purposes not found.');
+        }
+
+        // Return the view with the visitor data.
+        return view('pages.purposes.edit', compact('purposes'));
+
+    }
     /**
      * Store a newly created purpose in storage.
      */
@@ -27,29 +51,47 @@ class PurposeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            // If it's an API request, return JSON error response
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            // For web request, return with validation errors to be displayed in Blade
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
         $purpose = Purpose::create($request->all());
 
-        return response()->json([
-            'message' => 'Purpose created successfully',
-            'purpose' => $purpose
-        ], 201);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json([
+                'message' => 'Department created successfully',
+                'purpose' => $purpose
+            ], 201);
+        }
+
+        // For web request, redirect back with a success message
+        return redirect()->route('purposes.index')
+            ->with('success', 'Purpose added successfully');
     }
 
     /**
      * Display the specified purpose.
      */
-    public function show($id)
+    public function show($id,Request $request)
     {
         $purpose = Purpose::find($id);
 
         if (!$purpose) {
-            return response()->json(['error' => 'Purpose not found'], 404);
+            return $request->is('api/*')
+                ? response()->json(['error' => 'Department not found'], 404)
+                : redirect()->route('departments.index')->with('error', 'Department not found.');
         }
+        
 
         return response()->json($purpose);
+
     }
 
     /**
@@ -60,40 +102,53 @@ class PurposeController extends Controller
         $purpose = Purpose::find($id);
 
         if (!$purpose) {
-            return response()->json(['error' => 'Purpose not found'], 404);
+            return $request->is('api/*')
+                ? response()->json(['error' => 'Department not found'], 404)
+                : redirect()->route('purposes.index')->with('error', 'Purpose not found.');
         }
+
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:purposes,name,' . $id,
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $request->is('api/*')
+                ? response()->json($validator->errors(), 422)
+                : redirect()->back()->withErrors($validator)->withInput();
         }
 
         $purpose->update($request->all());
 
-        return response()->json([
-            'message' => 'Purpose updated successfully',
-            'purpose' => $purpose
-        ]);
+        if ($request->is('api/*')) {
+            return response()->json([
+                'message' => 'Purpose updated successfully',
+                'purpose' => $purpose
+            ]);
+        } else {
+            return redirect()->route('purposes.index')
+                ->with('success', 'Purpose updated successfully');
+        }
     }
 
     /**
      * Remove the specified purpose from storage.
      */
-    public function destroy($id)
+    public function destroy($id,Request $request)
     {
         $purpose = Purpose::find($id);
 
         if (!$purpose) {
-            return response()->json(['error' => 'Purpose not found'], 404);
+            return $request->is('api/*')
+                ? response()->json(['error' => 'Purpose not found'], 404)
+                : redirect()->route('purposes.index')->with('error', 'Department not found.');
         }
-
+        
         $purpose->delete();
-
-        return response()->json([
-            'message' => 'Purpose deleted successfully'
-        ]);
+        
+        return $request->is('api/*')
+            ? response()->json(['message' => 'Purpose deleted successfully'])
+            : redirect()->route('purposes.index')->with('success', 'Department deleted successfully');
+        
     }
 }

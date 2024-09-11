@@ -18,14 +18,14 @@ class UserController extends Controller
     {
         // Fetch all users and their roles
         $users = User::with('roles', 'roles.permissions')->get();
-    
+
         if ($request->is('api/*')) {
             return response()->json($users);
         } else {
-            $roles = Role::get();
+            $roles = Role::all();
             $permissions = Permission::all();
 
-            return view('pages.users.index', compact('users', 'roles','permissions'));
+            return view('pages.users.index', compact('users', 'roles', 'permissions'));
         }
     }
     public function create()

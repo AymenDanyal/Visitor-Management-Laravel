@@ -7,6 +7,8 @@ use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PurposeController;
 
 
 
@@ -46,6 +48,24 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');   
         Route::put('{id}', [RoleController::class, 'update'])->name('roles.update');    
         Route::delete('{id}', [RoleController::class, 'destroy'])->name('roles.destroy'); 
+    });
+    Route::prefix('departments')->group(function () {
+        Route::get('index', [DepartmentController::class, 'index'])->name('departments.index');  
+        Route::get('create', [DepartmentController::class, 'create'])->name('departments.create'); 
+        Route::post('store', [DepartmentController::class, 'store'])->name('departments.store');   
+        Route::get('{id}', [DepartmentController::class, 'show'])->name('departments.show');      
+        Route::get('{id}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');   
+        Route::put('{id}', [DepartmentController::class, 'update'])->name('departments.update');    
+        Route::delete('{id}', [DepartmentController::class, 'destroy'])->name('departments.destroy'); 
+    });
+    Route::prefix('purposes')->group(function () {
+        Route::get('index', [PurposeController::class, 'index'])->name('purposes.index');  
+        Route::get('create', [PurposeController::class, 'create'])->name('purposes.create'); 
+        Route::post('store', [PurposeController::class, 'store'])->name('purposes.store');   
+        Route::get('{id}', [PurposeController::class, 'show'])->name('purposes.show');      
+        Route::get('{id}/edit', [PurposeController::class, 'edit'])->name('purposes.edit');   
+        Route::put('{id}', [PurposeController::class, 'update'])->name('purposes.update');    
+        Route::delete('{id}', [PurposeController::class, 'destroy'])->name('purposes.destroy'); 
     });
     Route::prefix('permissions')->group(function () {
         Route::get('index', [PermissionsController::class, 'index'])->name('permissions.index');  
