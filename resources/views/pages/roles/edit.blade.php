@@ -1,17 +1,17 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid card shadow mb-4">
     <div class="row">
         <div class="col-lg-12">
             <div class="p-5">
                 <div class="text-left">
                     <h1 class="heading">Edit Role</h1>
                 </div>
-                <form action="{{ route('roles.update', ['id' => $role->id]) }}" method="POST" class="role">
+                <form action="{{ route('roles.update', $role->id) }}" method="POST" class="role">
                     @csrf
                     @method('PUT')
-                    
+
                     @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -26,14 +26,15 @@
 
                     <div class="row form-group">
                         <div class="mb-3 col-sm-12">
-                            <input name="name" class="form-control" placeholder="Role Name" required value="{{ old('name', $role->name) }}">
+                            <label for="role-name">Role Name</label>
+                            <input id="role-name" name="name" class="form-control" placeholder="Role Name" required value="{{ old('name', $role->name) }}">
                         </div>
                         
-                        <div class="mb-3 col-sm-12">
+                        <div class="form-group mb-3 col-sm-12">
                             <label for="permissions">Permissions</label>
                             <div class="form-check">
                                 @foreach($permissions as $permission)
-                                    <div class="form-check">
+                                    <div class="form-check mb-2">
                                         <input type="checkbox" class="form-check-input" id="permission-{{ $permission->id }}" name="permissions[]" value="{{ $permission->id }}" {{ in_array($permission->id, $rolePermissions) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="permission-{{ $permission->id }}">
                                             {{ ucfirst($permission->name) }}

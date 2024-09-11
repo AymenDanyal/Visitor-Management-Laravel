@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid card shadow mb-4">
     <div class="row">
         <div class="col-lg-12">
             <div class="p-5">
@@ -23,7 +23,7 @@
 
                     <div class="form-group mb-4">
                         <label for="permission-name" class="form-label">Permission Name</label>
-                        <input id="permission-name" name="name" class="form-control" placeholder="permission Name" required value="{{ old('name') }}">
+                        <input id="permission-name" name="name[]" class="form-control" placeholder="permission Name" required value="{{ old('name') }}">
                     </div>
 
            

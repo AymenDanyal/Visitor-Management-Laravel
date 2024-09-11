@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid card shadow mb-4">
     <div class="row">
         <div class="col-lg-12">
             <div class="p-5">
@@ -60,7 +60,6 @@
 </div>
 
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let permissionIndex = 0;
@@ -80,7 +79,7 @@
         // Remove permission field
         window.removePermission = function(index, type) {
             if (type === 'existing') {
-                $(`#existing-permission-${index}`).remove();Permission
+                $(`#existing-permission-${index}`).remove();
             } else {
                 $(`#new-permission-${index}`).remove();
             }

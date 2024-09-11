@@ -32,16 +32,17 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
+            dd('erroe');
             return redirect()->route('roles.create')
                 ->withErrors($validator)
                 ->withInput();
         }
-
+       
         // Create the role
         $role = Role::create([
             'name' => $request->name,
         ]);
-
+        
         // Collect all permission IDs to attach
         $permissionIds = [];
 
@@ -62,7 +63,7 @@ class RoleController extends Controller
 
         // Attach permissions to the role
         $role->permissions()->sync($permissionIds);
-
+        
         return redirect()->route('users.index')
             ->with('success', 'Role created successfully.');
     }
@@ -85,7 +86,7 @@ class RoleController extends Controller
         }
 
         // Retrieve permissions associated with the role
-        $rolePermissions = $role->permissions->pluck('id')->toArray();
+        $rolePermissions = $role->permissions()->pluck('id')->toArray();
         
         // Retrieve all available permissions
         $permissions = Permission::all();
@@ -118,19 +119,31 @@ class RoleController extends Controller
             return response()->json(['error' => 'Role not found'], 404);
         }
 
+        // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:roles,name,' . $id,
+            'permissions' => 'array',
+            'permissions.*' => 'integer|exists:permissions,id', // Validate each permission ID
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $role->update($request->all());
+        // Update role name
+        $role->update([
+            'name' => $request->input('name'),
+        ]);
+
+        // Sync the role's permissions
+        if ($request->has('permissions')) {
+            $role->permissions()->sync($request->input('permissions'));
+        }
 
         return redirect()->route('users.index')
-        ->with('success', 'Role(s) updated successfully.');
+            ->with('success', 'Role updated successfully.');
     }
+
 
     /**
      * Remove the specified role from storage.
@@ -145,7 +158,8 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return redirect()->route('users.index')
-        ->with('success', 'Role(s) deleted successfully.');
+        return response()->json([
+            'message' => 'Permission deleted successfully'
+        ]);
     }
 }

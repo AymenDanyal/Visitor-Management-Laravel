@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid card shadow mb-4">
     <div class="row">
         <div class="col-lg-12">
             <div class="p-5">
@@ -31,7 +31,7 @@
 
                     <div class="row form-group">
                         <div class="mb-3 col-sm-12">
-                            <label for="name">purpose Name</label>
+                            <label for="name">Purpose Name</label>
                             <input type="text" class="form-control" name="name" value="{{ old('name', $purposes->name) }}" required placeholder="purpose Name">
                         </div>
                     </div>

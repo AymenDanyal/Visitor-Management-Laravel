@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid card shadow mb-4">
     <div class="row">
         <div class="col-lg-12">
             <div class="p-5">

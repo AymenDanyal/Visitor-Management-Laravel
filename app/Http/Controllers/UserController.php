@@ -15,19 +15,42 @@ class UserController extends Controller
      * Display a listing of the users.
      */
     public function index(Request $request)
-    {
-        // Fetch all users and their roles
-        $users = User::with('roles', 'roles.permissions')->get();
+{
+    // Fetch all users with their roles and permissions
+    $users = User::with('roles.permissions')->get();
 
-        if ($request->is('api/*')) {
-            return response()->json($users);
-        } else {
-            $roles = Role::all();
-            $permissions = Permission::all();
+    if ($request->is('api/*')) {
+        // Prepare the data structure for API response
+        $users = $users->map(function($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->roles->map(function($role) {
+                    return [
+                        'id' => $role->id,
+                        'name' => $role->name,
+                        'permissions' => $role->permissions->map(function($permission) {
+                            return [
+                                'id' => $permission->id,
+                                'name' => $permission->name,
+                            ];
+                        }),
+                    ];
+                }),
+            ];
+        });
 
-            return view('pages.users.index', compact('users', 'roles', 'permissions'));
-        }
+        return response()->json($users);
+    } else {
+        // For non-API requests
+        $roles = Role::all();
+        $permissions = Permission::all();
+
+        return view('pages.users.index', compact('users', 'roles', 'permissions'));
     }
+}
+
     public function create()
     {
         $user = User::all();

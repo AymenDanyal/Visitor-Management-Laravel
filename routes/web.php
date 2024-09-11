@@ -79,7 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Define the dashboard route with the name
     Route::get('/dashboard', function () {
-        return view('layouts.master');
+        return view('pages.dashboard');
     })->name('dashboard');
 });
 
