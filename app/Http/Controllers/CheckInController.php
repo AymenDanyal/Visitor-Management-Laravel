@@ -86,16 +86,16 @@ class CheckInController extends Controller
     {
         // Validate request
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:check_ins,id',
+            'id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
-        }
+        }  
 
-        // Find the CheckIn record
-        $checkIn = CheckIn::find($request->id);
-
+        // Find the CheckIn record for the given visitor_id
+        $checkIn = CheckIn::where('visitor_id', $request->id)->first();
+        
         if (!$checkIn) {
             return response()->json(['error' => 'Check-in record not found'], 404);
         }
@@ -108,6 +108,10 @@ class CheckInController extends Controller
         // Get the associated visitor details
         $visitor = Visitor::find($checkIn->visitor_id);
 
+        if (!$visitor) {
+            return response()->json(['error' => 'Visitor not found'], 404);
+        }
+
         // Prepare broadcast data
         $broadcastData = [
             'checkIn' => $checkIn,
@@ -115,13 +119,14 @@ class CheckInController extends Controller
         ];
 
         // Broadcast the check-in update event
-        event(new CheckInUpdated($broadcastData,'Check-out'));
+        event(new CheckInUpdated($broadcastData, 'Check-out'));
 
         return response()->json([
             'message' => 'Visitor checked out successfully',
             'checkIn' => $checkIn
         ]);
     }
+
 
     /** 
      * Remove the specified check-in record from storage.

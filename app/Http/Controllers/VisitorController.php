@@ -216,8 +216,8 @@ class VisitorController extends Controller
      */
     public function show($id)
     {
-        $visitor = Visitor::find($id);
-
+        $visitor = Visitor::with('checkIns')->find($id);
+        
         if (!$visitor) {
             return response()->json(['error' => 'Visitor not found'], 404);
         }

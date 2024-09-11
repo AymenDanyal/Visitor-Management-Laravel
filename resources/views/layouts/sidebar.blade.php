@@ -25,7 +25,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" aria-expanded="true" data-toggle="collapse" aria-controls="collapseTwo"
             data-target="#departments">
-            <i class="fas fa-boxes"></i> <span>Departments</span>
+            <i class="fas fa-boxes"></i> <span>Visit Options</span>
         </a>
         <div class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" id="departments">
             <div class="bg-white collapse-inner py-2 rounded">

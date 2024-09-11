@@ -79,10 +79,15 @@
                         @foreach($roles as $role)
                         <tr id="row-{{ $role->id }}">
                             <td>{{ $role->name }}</td>
-                            <td>
-                                @foreach($role->permissions as $permission)
-                                {{ $permission->name }}<br>
-                                @endforeach
+                            <td style="width: 70%;">
+
+                                <div class="permissions-container" >
+                                    @foreach($role->permissions as $permission)
+                                        <div class="permission">
+                                            <span>{{ $permission->name }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </td>
                             @canany(['roles_edit', 'roles_delete'])
                             <td>
@@ -163,6 +168,23 @@
 
     .heading {
         padding: 22px 0;
+    }
+
+    .permissions-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .permission {
+        border: 1px solid #e3e6f0;
+        padding: 2px 10px;
+        border-radius: 50px;
+        margin: 10px 2px;
+        background-color: #f8f9fc;
+        color: #5a5c69;
+        display: inline-block;
+        white-space: nowrap;
+        width: fit-content;
     }
 </style>
 @endpush
