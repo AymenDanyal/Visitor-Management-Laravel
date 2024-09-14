@@ -45,7 +45,7 @@ Route::middleware('auth:sanctum','checkToken')->group(function () {
     Route::get('check-ins', [CheckInController::class, 'index']);
     Route::post('add-check-ins', [CheckInController::class, 'store']);
     Route::get('check-ins/{id}', [CheckInController::class, 'show']);
-    Route::put('check-out/', [CheckInController::class, 'update']);
+    Route::post('check-out', [CheckInController::class, 'update']);
     Route::delete('checkDel/{id}', [CheckInController::class, 'destroy']);
 
     Route::get('roles', [RoleController::class, 'index']);

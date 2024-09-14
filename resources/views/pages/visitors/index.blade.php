@@ -18,9 +18,7 @@
                             <th>CNIC Front Image</th>
                             <th>CNIC Back Image</th>
                             <th>User Image</th>
-                            <th>Purpose of Visit</th>
-                            <th>Department</th>
-                            <th>Department Person Name</th>
+                           
                             <th>Organization Name</th>
                             <th>Vehicle Number</th>
                             <th>Comments</th>
@@ -55,13 +53,14 @@
                                 No Image
                                 @endif
                             </td>
-                            <td>{{ $visitor->purpose_of_visit }}</td>
-                            <td>{{ $visitor->department }}</td>
-                            <td>{{ $visitor->department_person_name }}</td>
+                            
                             <td>{{ $visitor->organization_name }}</td>
                             <td>{{ $visitor->vehicle_number }}</td>
                             <td>{{ $visitor->comments }}</td>
                             <td id="visitor-row-{{ $visitor->id }}">
+                                @can('visitor_history_index')
+                                    <a href="{{ route('check-ins.show', $visitor->id) }}" class="btn btn-info">Visit History</a>
+                                @endcan
                                 <a href="{{ route('visitors.edit', $visitor->id) }}" class="btn btn-success">Edit</a>
                                 <button class="btn btn-danger delete-btn" data-id="{{ $visitor->id }}">Delete</button>
                             </td>

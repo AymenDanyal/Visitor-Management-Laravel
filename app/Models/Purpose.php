@@ -14,4 +14,10 @@ class Purpose extends Model
     {
         return $this->belongsToMany(Visitor::class, 'visitor_purposes');
     }
+    
+    public function checkIns()
+    {
+        return $this->hasMany(CheckIn::class, 'purpose_of_visit');
+    }
+    
 }

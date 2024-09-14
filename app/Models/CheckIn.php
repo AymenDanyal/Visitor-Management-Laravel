@@ -12,12 +12,23 @@ class CheckIn extends Model
         'visitor_id',
         'gatekeeper_id',
         'check_in_time',
-        'check_out_time'
+        'check_out_time',
+        'purpose_of_visit', 
+        'department', 
+        'department_person_name',
     ];
 
     public function visitor()
     {
         return $this->belongsTo(Visitor::class);
+    }
+    public function purposes()
+    {
+        return $this->belongsTo(Purpose::class,'purpose_of_visit');
+    }
+    public function departments()
+    {
+        return $this->belongsTo(Department::class,'department');
     }
 
     public function gatekeeper()

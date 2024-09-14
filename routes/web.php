@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PurposeController;
+use App\Http\Controllers\CheckInController;
 
 
 
@@ -31,6 +32,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('{id}', [VisitorController::class, 'update'])->name('visitors.update');    
         Route::delete('{id}', [VisitorController::class, 'destroy'])->name('visitors.destroy'); 
     });
+    Route::prefix('check-ins')->group(function () {
+        Route::get('index', [CheckInController::class, 'index'])->name('check-ins.index');  
+        Route::get('create', [CheckInController::class, 'create'])->name('check-ins.create'); 
+        Route::post('store', [CheckInController::class, 'store'])->name('check-ins.store');   
+        Route::get('{id}', [CheckInController::class, 'show'])->name('check-ins.show');      
+        Route::get('{id}/edit', [CheckInController::class, 'edit'])->name('check-ins.edit');   
+        Route::put('{id}', [CheckInController::class, 'update'])->name('check-ins.update');    
+        Route::delete('{id}', [CheckInController::class, 'destroy'])->name('check-ins.destroy'); 
+    });
+
+
+
+
     Route::prefix('users')->group(function () {
         Route::get('index', [UserController::class, 'index'])->name('users.index');  
         Route::get('create', [UserController::class, 'create'])->name('users.create'); 

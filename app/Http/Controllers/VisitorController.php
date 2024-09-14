@@ -16,7 +16,8 @@ class VisitorController extends Controller
      */
     public function index(Request $request)
     {
-        $visitors = Visitor::all();
+        $visitors = Visitor::with('checkIns')->get();
+        // dd($visitors);
         if ($request->is('api/*')) {
 
             return response()->json($visitors);
@@ -117,7 +118,7 @@ class VisitorController extends Controller
             'user_image.*' => 'required_if:group,true|image|max:5000',
 
             'gatekeeper_id' => 'required|string|max:255',
-            'purpose_of_visit' => 'required|in:interview,meeting,delivery,other',
+            'purpose_of_visit' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'department_person_name' => 'required|string|max:255',
             'organization_name' => 'nullable|string|max:255',
@@ -152,9 +153,7 @@ class VisitorController extends Controller
                     'cnic_front_image' => $cnicFrontImagePath,
                     'cnic_back_image' => $cnicBackImagePath,
                     'user_image' => $userImagePath,
-                    'purpose_of_visit' => $request->input('purpose_of_visit'),
-                    'department' => $request->input('department'),
-                    'department_person_name' => $request->input('department_person_name'),
+                    
                     'organization_name' => $request->input('organization_name'),
                     'vehicle_number' => $request->input('vehicle_number'),
                     'comments' => $request->input('comments'),
@@ -165,6 +164,9 @@ class VisitorController extends Controller
                 $checkIn = CheckIn::create([
                     'visitor_id' => $visitor->id,
                     'gatekeeper_id' => $request->input('gatekeeper_id'),
+                    'purpose_of_visit' => $request->input('purpose_of_visit'),
+                    'department' => $request->input('department'),
+                    'department_person_name' => $request->input('department_person_name'),
                 ]);
 
                 $checkIns[] = $checkIn;

@@ -29,6 +29,10 @@ class CheckInController extends Controller
         $validator = Validator::make($request->all(), [
             'visitor_id' => 'required|exists:visitors,id',
             'gatekeeper_id' => 'required|exists:users,id',
+            'purpose_of_visit' => 'required|string|max:255',
+            'department' =>'required|string|max:255',
+            'department_person_name' => 'required|string|max:255',
+            
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +43,10 @@ class CheckInController extends Controller
         $checkIn = CheckIn::create([
             'visitor_id' => $request->visitor_id,
             'gatekeeper_id' => $request->gatekeeper_id,
+            'purpose_of_visit' => $request->input('purpose_of_visit'),
+            'department' => $request->input('department'),
+            'department_person_name' => $request->input('department_person_name'),
+            
         ]);
 
         // Get the visitor details
@@ -64,18 +72,24 @@ class CheckInController extends Controller
     /**
      * Display the specified check-in record.
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
 
-
-        $checkIn = CheckIn::with(['visitor', 'gatekeeper'])->find($id);
-        if (!$checkIn) {
+      
+        $checkIns = CheckIn::with(['visitor', 'gatekeeper','purposes','departments'])->where('visitor_id',$id)->get();
+     
+        if (!$checkIns) {
             return response()->json(['error' => 'Check-in record not found'], 404);
         }
 
+        if ($request->is('api/*')) {
 
+            return response()->json($checkIns);
+        } else {
+            return view('pages.visitors.history', compact('checkIns'));
+        }
 
-        return response()->json($checkIn);
+        return response()->json($checkIns);
     }
 
 

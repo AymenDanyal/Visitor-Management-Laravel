@@ -14,4 +14,8 @@ class Department extends Model
     {
         return $this->belongsToMany(Visitor::class, 'visitor_departments');
     }
+    public function checkIns()
+    {
+        return $this->hasMany(CheckIn::class, 'department');
+    }
 }

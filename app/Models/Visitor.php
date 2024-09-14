@@ -14,9 +14,7 @@ class Visitor extends Model
         'cnic_front_image', 
         'cnic_back_image', 
         'user_image', 
-        'purpose_of_visit', 
-        'department', 
-        'department_person_name', 
+         
         'organization_name', 
         'vehicle_number', 
         'comments'
