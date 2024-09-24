@@ -85,7 +85,12 @@ class CheckInController extends Controller
                 ->get();
 
             if ($checkIns->isEmpty()) {
-                return response()->json(['error' => 'Check-in record not found'], 404);
+                if ($request->is('api/*')) {
+                    return response()->json(['error' => 'Check-in record not found'], 404);
+                } else {
+                    return view('pages.visitors.history', compact('checkIns'));
+                }
+                
             }
 
             if ($request->is('api/*')) {
@@ -134,7 +139,6 @@ class CheckInController extends Controller
 
             // Prepare broadcast data
             $broadcastData = [
-                'checkIn' => $checkIn,
                 'visitor' => $visitor,
             ];
 
